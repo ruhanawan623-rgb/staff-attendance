@@ -1,0 +1,8 @@
+# Environment variables and secrets
+.env
+*.env
+.agents/secrets*
+
+# System & OS files
+.DS_Store
+Thumbs.db
