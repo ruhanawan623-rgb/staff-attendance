@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff Attendance</title>
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- =========================================================================
+       1. Authentication / Login Shell (Toggled dynamically)
+       ========================================================================= -->
+  <div id="auth-shell" style="display: none;"></div>
+
+  <!-- =========================================================================
+       2. Main Application Shell
+       ========================================================================= -->
+  <div class="app-container" id="app-shell">
+
+    <!-- --- LEFT SIDEBAR NAVIGATION --- -->
+    <aside class="sidebar" id="app-sidebar">
+      <!-- School / System Brand -->
+      <div class="sidebar-brand">
+        <div class="brand-icon-box" id="brand-logo-icon">💼</div>
+        <div class="brand-info">
+          <span class="brand-title" id="brand-title-text">Staff Attendance</span>
+          <span class="brand-subtitle" id="brand-sub-text">2025–2026</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">General</div>
+        <div class="nav-item active" data-view="dashboard" onclick="window.app.navigate('dashboard')">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </div>
+
+        <div class="nav-section-label">Attendance Hub</div>
+        <div class="nav-item" data-view="staff-attendance" onclick="window.app.navigate('staff-attendance')">
+          <i data-lucide="user-check"></i>
+          <span>Staff Attendance</span>
+        </div>
+        <div class="nav-item" data-view="student-attendance" onclick="window.app.navigate('student-attendance')">
+          <i data-lucide="calendar-check"></i>
+          <span>Student Attendance</span>
+        </div>
+        <div class="nav-item" data-view="calendar" onclick="window.app.navigate('calendar')">
+          <i data-lucide="calendar"></i>
+          <span>Attendance Calendar</span>
+        </div>
+
+        <div class="nav-section-label">People & Records</div>
+        <div class="nav-item" data-view="staff" onclick="window.app.navigate('staff')">
+          <i data-lucide="briefcase"></i>
+          <span>Faculty & Staff</span>
+        </div>
+        <div class="nav-item" data-view="students" onclick="window.app.navigate('students')">
+          <i data-lucide="graduation-cap"></i>
+          <span>Student Directory</span>
+        </div>
+        <div class="nav-item" data-view="leaves" onclick="window.app.navigate('leaves')">
+          <i data-lucide="file-clock"></i>
+          <span>Leave Management</span>
+        </div>
+
+        <div class="nav-section-label">Analytics & Config</div>
+        <div class="nav-item" data-view="reports" onclick="window.app.navigate('reports')">
+          <i data-lucide="bar-chart-3"></i>
+          <span>Attendance Reports</span>
+        </div>
+        <div class="nav-item" data-view="notifications" onclick="window.app.navigate('notifications')">
+          <i data-lucide="bell"></i>
+          <span>Notifications</span>
+          <span class="nav-badge" id="sidebar-ntf-badge" style="display: none;">0</span>
+        </div>
+        <div class="nav-item" data-view="settings" onclick="window.app.navigate('settings')">
+          <i data-lucide="settings"></i>
+          <span>School Settings</span>
+        </div>
+      </nav>
+
+      <!-- Sidebar Mini User Profile Footer -->
+      <div class="sidebar-footer">
+        <div class="user-card-mini">
+          <img src="" id="mini-user-avatar" alt="Avatar" />
+          <div class="user-card-details">
+            <div class="user-card-name" id="mini-user-name">User Name</div>
+            <div class="user-card-role" id="mini-user-role">Role</div>
+          </div>
+          <button class="icon-button" style="width: 32px; height: 32px; background: transparent; border: none; color: #94a3b8;" title="Sign Out" onclick="window.app.logout()">
+            <i data-lucide="log-out" style="width: 16px;"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- --- MAIN WRAPPER --- -->
+    <div class="main-wrapper">
+      
+      <!-- TOP HEADER NAVBAR -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="sidebar-toggle-btn" onclick="window.app.toggleSidebar()" title="Toggle Sidebar">
+            <i data-lucide="menu"></i>
+          </button>
+
+          <!-- Search Bar -->
+          <div class="header-search">
+            <i data-lucide="search" class="header-search-icon"></i>
+            <input 
+              type="text" 
+              placeholder="Search students, staff, roll numbers..." 
+              onkeydown="if (event.key === 'Enter') window.app.handleGlobalSearch(this.value)"
+            />
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- Live Date & Clock -->
+          <div class="live-datetime-pill">
+            <i data-lucide="clock" style="width: 15px;"></i>
+            <span id="header-live-time">Loading date...</span>
+          </div>
+
+          <!-- Role Switcher (For demonstration & testing) -->
+          <select class="role-switcher-select" id="header-role-select" onchange="window.app.handleRoleChange(this.value)">
+            <option value="admin">👑 Role: Admin</option>
+            <option value="teacher">👨‍🏫 Role: Teacher</option>
+            <option value="staff">💼 Role: Staff</option>
+          </select>
+
+          <!-- UI Text & Display Size Controller -->
+          <div class="ui-size-control-wrapper" title="Adjust UI & Text Size">
+            <button class="ui-size-btn" onclick="window.app.decreaseUiSize()" title="Decrease Size (A-)">
+              <span style="font-weight: 700; font-size: 0.8rem;">A-</span>
+            </button>
+            <span class="ui-size-indicator" id="header-ui-size-label" onclick="window.app.cycleUiSize()" title="Click to cycle display sizes">Large</span>
+            <button class="ui-size-btn" onclick="window.app.increaseUiSize()" title="Increase Size (A+)">
+              <span style="font-weight: 800; font-size: 1rem;">A+</span>
+            </button>
+          </div>
+
+          <!-- Theme Dark/Light Toggle -->
+          <button class="icon-button" onclick="window.app.toggleTheme()" title="Toggle Dark/Light Mode">
+            <i data-lucide="moon" id="theme-icon"></i>
+          </button>
+
+          <!-- Notification Bell Trigger -->
+          <div style="position: relative;">
+            <button class="icon-button" onclick="window.app.toggleNotificationsPopover()" title="Notifications">
+              <i data-lucide="bell"></i>
+              <span class="notification-badge-dot" id="ntf-badge-dot" style="display: none;"></span>
+            </button>
+
+            <!-- Notification Popover Dropdown -->
+            <div class="notifications-dropdown" id="notifications-dropdown">
+              <div class="ntf-header">
+                <span style="font-weight: 700; font-size: 0.95rem;">Recent Alerts</span>
+                <a href="javascript:void(0)" onclick="window.app.navigate('notifications'); window.app.toggleNotificationsPopover();" style="font-size: 0.78rem; color: var(--primary-600); font-weight: 600;">View All</a>
+              </div>
+              <div class="ntf-list" id="ntf-dropdown-list">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- User Profile Dropdown Pill -->
+          <div class="profile-menu-trigger" onclick="window.app.navigate('settings')" title="View Account Settings">
+            <img src="" id="header-user-avatar" class="profile-avatar-top" alt="Avatar" />
+            <div class="profile-meta-top">
+              <span class="profile-name-top" id="header-user-name">Dr. Eleanor Vance</span>
+              <span class="profile-role-top" id="header-user-role">Administrator</span>
+            </div>
+          </div>
+
+          <!-- Quick Sign Out Button -->
+          <button class="icon-button" onclick="window.app.logout()" title="Sign Out / Switch Account">
+            <i data-lucide="log-out"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW BODY (Dynamically Populated) -->
+      <main class="content-body" id="content-view">
+        <!-- View content will render here -->
+      </main>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       3. Global Modal Architecture
+       ========================================================================= -->
+  <div class="modal-overlay" id="app-modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title-text">Modal Title</h3>
+        <button class="modal-close-btn" onclick="window.app.closeModal()">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body-content">
+        <!-- Injected modal body -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="window.app.closeModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" id="modal-submit-btn" onclick="window.app.handleModalSubmit()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       4. Toast Notifications Container
+       ========================================================================= -->
+  <div id="toast-container"></div>
+
+  <!-- =========================================================================
+       5. Application Scripts (Order is critical)
+       ========================================================================= -->
+  <script src="js/seed-data.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/views/auth.js"></script>
+  <script src="js/views/dashboard.js"></script>
+  <script src="js/views/students.js"></script>
+  <script src="js/views/staff.js"></script>
+  <script src="js/views/student-attendance.js"></script>
+  <script src="js/views/staff-attendance.js"></script>
+  <script src="js/views/leaves.js"></script>
+  <script src="js/views/reports.js"></script>
+  <script src="js/views/calendar.js"></script>
+  <script src="js/views/notifications.js"></script>
+  <script src="js/views/settings.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
