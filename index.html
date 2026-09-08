@@ -11,7 +11,7 @@
   <meta http-equiv="Expires" content="0" />
 
   <!-- CSS Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=2.1" />
+  <link rel="stylesheet" href="css/styles.css?v=3.0" />
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -20,8 +20,22 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-    // Immediate pre-boot migration script to ensure PDCS Admin is applied instantly
+    // Immediate pre-boot migration script to ensure PDCS Admin and Italic Simple Font are applied instantly
     try {
+      // Set font style default to italic
+      var currentFontStyle = localStorage.getItem('EDUTRACK_FONT_STYLE') || 'italic';
+      localStorage.setItem('EDUTRACK_FONT_STYLE', currentFontStyle);
+      document.documentElement.setAttribute('data-font-style', currentFontStyle);
+
+      // Normalize UI display size default
+      var currentUiSize = localStorage.getItem('EDUTRACK_UI_SIZE');
+      if (!currentUiSize || currentUiSize === 'large') {
+        localStorage.setItem('EDUTRACK_UI_SIZE', 'normal');
+        document.documentElement.setAttribute('data-ui-size', 'normal');
+      } else {
+        document.documentElement.setAttribute('data-ui-size', currentUiSize);
+      }
+
       var cur = localStorage.getItem('EDUTRACK_CURRENT_USER');
       if (cur) {
         var parsedUser = JSON.parse(cur);
@@ -187,11 +201,17 @@
             <button class="ui-size-btn" onclick="window.app.decreaseUiSize()" title="Decrease Size (A-)">
               <span style="font-weight: 700; font-size: 0.8rem;">A-</span>
             </button>
-            <span class="ui-size-indicator" id="header-ui-size-label" onclick="window.app.cycleUiSize()" title="Click to cycle display sizes">Large</span>
+            <span class="ui-size-indicator" id="header-ui-size-label" onclick="window.app.cycleUiSize()" title="Click to cycle display sizes">Default</span>
             <button class="ui-size-btn" onclick="window.app.increaseUiSize()" title="Increase Size (A+)">
               <span style="font-weight: 800; font-size: 1rem;">A+</span>
             </button>
           </div>
+
+          <!-- Font Style Controller (Italic Simple / Regular Simple) -->
+          <button class="font-style-toggle-btn active" id="header-font-style-btn" onclick="window.app.toggleFontStyle()" title="Current: Italic Simple Font. Click to toggle Regular">
+            <span class="font-style-icon"><i>I</i></span>
+            <span class="font-style-text">Italic Font</span>
+          </button>
 
           <!-- Theme Dark/Light Toggle -->
           <button class="icon-button" onclick="window.app.toggleTheme()" title="Toggle Dark/Light Mode">

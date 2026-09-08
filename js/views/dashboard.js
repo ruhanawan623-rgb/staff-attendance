@@ -763,7 +763,7 @@ window.DashboardView = {
           plugins: {
             legend: {
               position: 'top',
-              labels: { color: textColor, font: { family: 'Plus Jakarta Sans', weight: '600', size: 12 } }
+              labels: { color: textColor, font: { family: 'Inter', style: 'italic', weight: '600', size: 12 } }
             },
             tooltip: {
               padding: 10,
@@ -774,11 +774,11 @@ window.DashboardView = {
           scales: {
             x: {
               grid: { color: gridColor },
-              ticks: { color: textColor, font: { family: 'Plus Jakarta Sans' } }
+              ticks: { color: textColor, font: { family: 'Inter', style: 'italic' } }
             },
             y: {
               grid: { color: gridColor },
-              ticks: { color: textColor, stepSize: 5, font: { family: 'Plus Jakarta Sans' } },
+              ticks: { color: textColor, stepSize: 5, font: { family: 'Inter', style: 'italic' } },
               beginAtZero: true
             }
           }
@@ -834,7 +834,7 @@ window.DashboardView = {
           plugins: {
             legend: {
               position: 'bottom',
-              labels: { color: textColor, padding: 14, font: { family: 'Plus Jakarta Sans', weight: '600', size: 12 } }
+              labels: { color: textColor, padding: 14, font: { family: 'Inter', style: 'italic', weight: '600', size: 12 } }
             },
             tooltip: {
               padding: 10,

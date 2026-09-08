@@ -8,21 +8,23 @@ class Application {
     this.currentView = 'dashboard';
     this.currentUser = null;
     this.theme = localStorage.getItem('EDUTRACK_THEME') || 'light';
+    this.fontStyle = localStorage.getItem('EDUTRACK_FONT_STYLE') || 'italic';
     this.uiSizeLevels = ['compact', 'normal', 'large', 'xlarge'];
     this.uiSizeLabels = {
-      compact: 'Compact (15px)',
-      normal: 'Default (16px)',
-      large: 'Large (18px)',
-      xlarge: 'Extra Large (20px)'
+      compact: 'Compact (14px)',
+      normal: 'Default (15px)',
+      large: 'Medium (16px)',
+      xlarge: 'Large (18px)'
     };
-    this.uiSize = localStorage.getItem('EDUTRACK_UI_SIZE') || 'large';
+    this.uiSize = localStorage.getItem('EDUTRACK_UI_SIZE') || 'normal';
     this.activeModalCallback = null;
     this.init();
   }
 
   init() {
-    // Apply saved theme & UI size
+    // Apply saved theme, font style & UI size
     this.applyTheme(this.theme);
+    this.applyFontStyle(this.fontStyle, false);
     this.applyUiSize(this.uiSize, false);
 
     // Set initial user (Admin by default)
@@ -204,10 +206,41 @@ class Application {
   applyUiSize(size, showFeedback = false) {
     document.documentElement.setAttribute('data-ui-size', size);
     const labelEl = document.getElementById('header-ui-size-label');
-    const labelMap = { compact: 'Compact', normal: 'Default', large: 'Large', xlarge: 'Extra' };
-    if (labelEl) labelEl.innerText = labelMap[size] || 'Large';
+    const labelMap = { compact: 'Compact', normal: 'Default', large: 'Medium', xlarge: 'Large' };
+    if (labelEl) labelEl.innerText = labelMap[size] || 'Default';
     if (showFeedback) {
       this.showToast(`Display size set to ${this.uiSizeLabels[size]}`, 'info');
+    }
+  }
+
+  // --- FONT STYLE CONTROLLER (ITALIC SIMPLE FONT) ---
+  toggleFontStyle() {
+    const nextStyle = this.fontStyle === 'italic' ? 'regular' : 'italic';
+    this.setFontStyle(nextStyle);
+  }
+
+  setFontStyle(style) {
+    this.fontStyle = style;
+    localStorage.setItem('EDUTRACK_FONT_STYLE', style);
+    this.applyFontStyle(style, true);
+  }
+
+  applyFontStyle(style, showFeedback = false) {
+    document.documentElement.setAttribute('data-font-style', style);
+    const btn = document.getElementById('header-font-style-btn');
+    if (btn) {
+      if (style === 'italic') {
+        btn.classList.add('active');
+        btn.innerHTML = `<span class="font-style-icon"><i>I</i></span><span class="font-style-text">Italic Font</span>`;
+        btn.title = "Current: Italic Simple Font. Click to toggle Regular";
+      } else {
+        btn.classList.remove('active');
+        btn.innerHTML = `<span class="font-style-icon" style="font-style: normal; font-family: sans-serif;">N</span><span class="font-style-text">Normal Font</span>`;
+        btn.title = "Current: Normal Font. Click to toggle Italic";
+      }
+    }
+    if (showFeedback) {
+      this.showToast(`Switched font to ${style === 'italic' ? 'Italic Simple Font' : 'Standard Normal Font'}`, 'info');
     }
   }
 
