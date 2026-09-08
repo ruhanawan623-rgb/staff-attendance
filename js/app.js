@@ -8,7 +8,6 @@ class Application {
     this.currentView = 'dashboard';
     this.currentUser = null;
     this.theme = localStorage.getItem('EDUTRACK_THEME') || 'light';
-    this.fontStyle = localStorage.getItem('EDUTRACK_FONT_STYLE') || 'italic';
     this.uiSizeLevels = ['compact', 'normal', 'large', 'xlarge'];
     this.uiSizeLabels = {
       compact: 'Compact (14px)',
@@ -22,10 +21,11 @@ class Application {
   }
 
   init() {
-    // Apply saved theme, font style & UI size
+    // Apply saved theme & UI size
     this.applyTheme(this.theme);
-    this.applyFontStyle(this.fontStyle, false);
     this.applyUiSize(this.uiSize, false);
+    document.documentElement.removeAttribute('data-font-style');
+    localStorage.removeItem('EDUTRACK_FONT_STYLE');
 
     // Set initial user (Admin by default)
     const storedUser = localStorage.getItem('EDUTRACK_CURRENT_USER');
@@ -213,35 +213,6 @@ class Application {
     }
   }
 
-  // --- FONT STYLE CONTROLLER (ITALIC SIMPLE FONT) ---
-  toggleFontStyle() {
-    const nextStyle = this.fontStyle === 'italic' ? 'regular' : 'italic';
-    this.setFontStyle(nextStyle);
-  }
-
-  setFontStyle(style) {
-    this.fontStyle = style;
-    localStorage.setItem('EDUTRACK_FONT_STYLE', style);
-    this.applyFontStyle(style, true);
-  }
-
-  applyFontStyle(style, showFeedback = false) {
-    document.documentElement.setAttribute('data-font-style', style);
-    const btn = document.getElementById('header-font-style-btn');
-    if (btn) {
-      if (style === 'italic') {
-        btn.classList.add('active');
-        btn.innerHTML = `<span class="font-style-icon"><i>I</i></span><span class="font-style-text">Italic Font</span>`;
-        btn.title = "Current: Italic Simple Font. Click to toggle Regular";
-      } else {
-        btn.classList.remove('active');
-        btn.innerHTML = `<span class="font-style-icon" style="font-style: normal; font-family: sans-serif;">N</span><span class="font-style-text">Normal Font</span>`;
-        btn.title = "Current: Normal Font. Click to toggle Italic";
-      }
-    }
-    if (showFeedback) {
-      this.showToast(`Switched font to ${style === 'italic' ? 'Italic Simple Font' : 'Standard Normal Font'}`, 'info');
-    }
   }
 
   // --- HEADER & LIVE CLOCK ---

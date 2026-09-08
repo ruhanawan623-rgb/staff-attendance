@@ -763,22 +763,24 @@ window.DashboardView = {
           plugins: {
             legend: {
               position: 'top',
-              labels: { color: textColor, font: { family: 'Inter', style: 'italic', weight: '600', size: 12 } }
+              labels: { color: textColor, font: { family: "'Plus Jakarta Sans', sans-serif", weight: '600', size: 12 } }
             },
             tooltip: {
               padding: 10,
               boxPadding: 4,
-              usePointStyle: true
+              usePointStyle: true,
+              bodyFont: { family: "'Inter', sans-serif", size: 12 },
+              titleFont: { family: "'Plus Jakarta Sans', sans-serif", weight: '600', size: 13 }
             }
           },
           scales: {
             x: {
               grid: { color: gridColor },
-              ticks: { color: textColor, font: { family: 'Inter', style: 'italic' } }
+              ticks: { color: textColor, font: { family: "'Inter', sans-serif", weight: '500', size: 11 } }
             },
             y: {
               grid: { color: gridColor },
-              ticks: { color: textColor, stepSize: 5, font: { family: 'Inter', style: 'italic' } },
+              ticks: { color: textColor, stepSize: 5, font: { family: "'Inter', sans-serif", weight: '500', size: 11 } },
               beginAtZero: true
             }
           }
@@ -834,11 +836,13 @@ window.DashboardView = {
           plugins: {
             legend: {
               position: 'bottom',
-              labels: { color: textColor, padding: 14, font: { family: 'Inter', style: 'italic', weight: '600', size: 12 } }
+              labels: { color: textColor, padding: 14, font: { family: "'Plus Jakarta Sans', sans-serif", weight: '600', size: 12 } }
             },
             tooltip: {
               padding: 10,
-              boxPadding: 6
+              boxPadding: 6,
+              bodyFont: { family: "'Inter', sans-serif", size: 12 },
+              titleFont: { family: "'Plus Jakarta Sans', sans-serif", weight: '600', size: 13 }
             }
           },
           cutout: '68%'

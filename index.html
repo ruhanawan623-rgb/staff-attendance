@@ -10,8 +10,13 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
 
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
   <!-- CSS Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=3.0" />
+  <link rel="stylesheet" href="css/styles.css?v=3.1" />
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -20,12 +25,11 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-    // Immediate pre-boot migration script to ensure PDCS Admin and Italic Simple Font are applied instantly
+    // Immediate pre-boot migration script to ensure PDCS Admin and modern UI scale are applied instantly
     try {
-      // Set font style default to italic
-      var currentFontStyle = localStorage.getItem('EDUTRACK_FONT_STYLE') || 'italic';
-      localStorage.setItem('EDUTRACK_FONT_STYLE', currentFontStyle);
-      document.documentElement.setAttribute('data-font-style', currentFontStyle);
+      // Clear legacy font style overrides to maintain clean modern typography
+      localStorage.removeItem('EDUTRACK_FONT_STYLE');
+      document.documentElement.removeAttribute('data-font-style');
 
       // Normalize UI display size default
       var currentUiSize = localStorage.getItem('EDUTRACK_UI_SIZE');
@@ -206,12 +210,6 @@
               <span style="font-weight: 800; font-size: 1rem;">A+</span>
             </button>
           </div>
-
-          <!-- Font Style Controller (Italic Simple / Regular Simple) -->
-          <button class="font-style-toggle-btn active" id="header-font-style-btn" onclick="window.app.toggleFontStyle()" title="Current: Italic Simple Font. Click to toggle Regular">
-            <span class="font-style-icon"><i>I</i></span>
-            <span class="font-style-text">Italic Font</span>
-          </button>
 
           <!-- Theme Dark/Light Toggle -->
           <button class="icon-button" onclick="window.app.toggleTheme()" title="Toggle Dark/Light Mode">
