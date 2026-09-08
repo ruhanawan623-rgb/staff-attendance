@@ -31,11 +31,19 @@ class Application {
       try {
         this.currentUser = JSON.parse(storedUser);
       } catch (e) {
-        this.currentUser = window.db.data.users[0];
+        this.currentUser = null;
       }
-    } else {
-      this.currentUser = window.db.data.users[0];
     }
+
+    if (!this.currentUser || this.currentUser.name === 'Sarah Jenkins' || this.currentUser.name === 'Dr. Eleanor Vance' || (this.currentUser.role === 'admin' && this.currentUser.name !== 'PDCS Admin')) {
+      this.currentUser = window.db.data.users[0];
+      this.currentUser.name = 'PDCS Admin';
+      localStorage.setItem('EDUTRACK_CURRENT_USER', JSON.stringify(this.currentUser));
+    }
+
+    this.updateHeaderBranding();
+    this.updateHeaderUserProfile();
+    this.updateSidebarNavForRole();
 
     // Start Live Clock
     this.startLiveClock();
@@ -231,6 +239,10 @@ class Application {
 
   updateHeaderUserProfile() {
     if (!this.currentUser) return;
+
+    if (this.currentUser.name === 'Sarah Jenkins' || this.currentUser.name === 'Dr. Eleanor Vance') {
+      this.currentUser.name = 'PDCS Admin';
+    }
 
     const nameEl = document.getElementById('header-user-name');
     const roleEl = document.getElementById('header-user-role');

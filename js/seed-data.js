@@ -46,7 +46,7 @@ const SEED_DATA = {
   users: [
     {
       id: "USR-001",
-      name: "Dr. Eleanor Vance",
+      name: "PDCS Admin",
       email: "admin@school.edu",
       password: "password123",
       role: "admin",
@@ -65,7 +65,7 @@ const SEED_DATA = {
     },
     {
       id: "USR-003",
-      name: "Sarah Jenkins",
+      name: "PDCS Admin",
       email: "staff@school.edu",
       password: "password123",
       role: "staff",
@@ -162,7 +162,7 @@ const SEED_DATA = {
     },
     {
       id: "STF-107",
-      name: "Sarah Jenkins",
+      name: "PDCS Admin",
       gender: "Female",
       designation: "Senior Admin Officer",
       department: "Administration & Support",
@@ -738,7 +738,7 @@ const SEED_DATA = {
       reason: "Attending annual regional history conference.",
       status: "Approved",
       appliedOn: "2026-08-30",
-      reviewedBy: "Dr. Eleanor Vance",
+      reviewedBy: "PDCS Admin",
       reviewedOn: "2026-08-31"
     },
     {
@@ -786,7 +786,7 @@ const SEED_DATA = {
       reason: "Attending urgent family bereavement out of state.",
       status: "Approved",
       appliedOn: "2026-08-27",
-      reviewedBy: "Dr. Eleanor Vance",
+      reviewedBy: "PDCS Admin",
       reviewedOn: "2026-08-27"
     },
     {
@@ -946,7 +946,7 @@ function generateHistoricalAttendance(students, staff) {
         status: status, // Present | Absent | Late | Leave
         remarks: remarks,
         markedAt: `${dateStr}T08:15:00`,
-        markedBy: "Dr. Eleanor Vance"
+        markedBy: "PDCS Admin"
       });
     });
   });

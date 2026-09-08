@@ -5,14 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Staff Attendance</title>
   
+  <!-- Cache Control Meta Tags -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
   <!-- CSS Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=2.1" />
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // Immediate pre-boot migration script to ensure PDCS Admin is applied instantly
+    try {
+      var cur = localStorage.getItem('EDUTRACK_CURRENT_USER');
+      if (cur) {
+        var parsedUser = JSON.parse(cur);
+        if (parsedUser.name === 'Sarah Jenkins' || parsedUser.name === 'Dr. Eleanor Vance' || parsedUser.role === 'admin') {
+          parsedUser.name = 'PDCS Admin';
+          localStorage.setItem('EDUTRACK_CURRENT_USER', JSON.stringify(parsedUser));
+        }
+      }
+      var dbRaw = localStorage.getItem('EDUTRACK_DB_PRO_V1');
+      if (dbRaw) {
+        var dbObj = JSON.parse(dbRaw);
+        var changed = false;
+        if (dbObj.users) {
+          dbObj.users.forEach(function(u) {
+            if (u.name === 'Sarah Jenkins' || u.name === 'Dr. Eleanor Vance' || u.role === 'admin') {
+              u.name = 'PDCS Admin';
+              changed = true;
+            }
+          });
+        }
+        if (dbObj.staff) {
+          dbObj.staff.forEach(function(s) {
+            if (s.name === 'Sarah Jenkins' || s.id === 'STF-107') {
+              s.name = 'PDCS Admin';
+              changed = true;
+            }
+          });
+        }
+        if (changed) {
+          localStorage.setItem('EDUTRACK_DB_PRO_V1', JSON.stringify(dbObj));
+        }
+      }
+    } catch(e) {}
+  </script>
 </head>
 <body>
 
@@ -92,10 +135,10 @@
       <!-- Sidebar Mini User Profile Footer -->
       <div class="sidebar-footer">
         <div class="user-card-mini">
-          <img src="" id="mini-user-avatar" alt="Avatar" />
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80" id="mini-user-avatar" alt="Avatar" />
           <div class="user-card-details">
-            <div class="user-card-name" id="mini-user-name">User Name</div>
-            <div class="user-card-role" id="mini-user-role">Role</div>
+            <div class="user-card-name" id="mini-user-name">PDCS Admin</div>
+            <div class="user-card-role" id="mini-user-role">Administrator</div>
           </div>
           <button class="icon-button" style="width: 32px; height: 32px; background: transparent; border: none; color: #94a3b8;" title="Sign Out" onclick="window.app.logout()">
             <i data-lucide="log-out" style="width: 16px;"></i>
@@ -176,9 +219,9 @@
 
           <!-- User Profile Dropdown Pill -->
           <div class="profile-menu-trigger" onclick="window.app.navigate('settings')" title="View Account Settings">
-            <img src="" id="header-user-avatar" class="profile-avatar-top" alt="Avatar" />
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80" id="header-user-avatar" class="profile-avatar-top" alt="Avatar" />
             <div class="profile-meta-top">
-              <span class="profile-name-top" id="header-user-name">Dr. Eleanor Vance</span>
+              <span class="profile-name-top" id="header-user-name">PDCS Admin</span>
               <span class="profile-role-top" id="header-user-role">Administrator</span>
             </div>
           </div>
@@ -227,20 +270,20 @@
   <!-- =========================================================================
        5. Application Scripts (Order is critical)
        ========================================================================= -->
-  <script src="js/seed-data.js"></script>
-  <script src="js/db.js"></script>
-  <script src="js/views/auth.js"></script>
-  <script src="js/views/dashboard.js"></script>
-  <script src="js/views/students.js"></script>
-  <script src="js/views/staff.js"></script>
-  <script src="js/views/student-attendance.js"></script>
-  <script src="js/views/staff-attendance.js"></script>
-  <script src="js/views/leaves.js"></script>
-  <script src="js/views/reports.js"></script>
-  <script src="js/views/calendar.js"></script>
-  <script src="js/views/notifications.js"></script>
-  <script src="js/views/settings.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/seed-data.js?v=2.1"></script>
+  <script src="js/db.js?v=2.1"></script>
+  <script src="js/views/auth.js?v=2.1"></script>
+  <script src="js/views/dashboard.js?v=2.1"></script>
+  <script src="js/views/students.js?v=2.1"></script>
+  <script src="js/views/staff.js?v=2.1"></script>
+  <script src="js/views/student-attendance.js?v=2.1"></script>
+  <script src="js/views/staff-attendance.js?v=2.1"></script>
+  <script src="js/views/leaves.js?v=2.1"></script>
+  <script src="js/views/reports.js?v=2.1"></script>
+  <script src="js/views/calendar.js?v=2.1"></script>
+  <script src="js/views/notifications.js?v=2.1"></script>
+  <script src="js/views/settings.js?v=2.1"></script>
+  <script src="js/app.js?v=2.1"></script>
 
 </body>
 </html>

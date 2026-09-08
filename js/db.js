@@ -20,10 +20,36 @@ class Database {
         // Ensure all required top-level keys exist
         if (!this.data.students || !this.data.staff || !this.data.studentAttendance) {
           this.resetToSeed();
-        } else if (this.data.settings && this.data.settings.schoolName !== "Staff Attendance") {
-          this.data.settings.schoolName = "Staff Attendance";
-          this.data.settings.schoolLogo = "💼";
-          this.save();
+        } else {
+          let updated = false;
+          if (this.data.settings && this.data.settings.schoolName !== "Staff Attendance") {
+            this.data.settings.schoolName = "Staff Attendance";
+            this.data.settings.schoolLogo = "💼";
+            updated = true;
+          }
+
+          // Automatically sync user and staff names to PDCS Admin
+          if (Array.isArray(this.data.users)) {
+            this.data.users.forEach(u => {
+              if (u.name === "Sarah Jenkins" || u.name === "Dr. Eleanor Vance" || (u.role === 'admin' && u.name !== 'PDCS Admin')) {
+                u.name = "PDCS Admin";
+                updated = true;
+              }
+            });
+          }
+
+          if (Array.isArray(this.data.staff)) {
+            this.data.staff.forEach(s => {
+              if (s.name === "Sarah Jenkins" || s.id === "STF-107") {
+                s.name = "PDCS Admin";
+                updated = true;
+              }
+            });
+          }
+
+          if (updated) {
+            this.save();
+          }
         }
       } catch (e) {
         console.error("Error parsing stored data, resetting to seed:", e);
